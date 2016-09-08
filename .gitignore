@@ -45,3 +45,13 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+Debug/DigiKeySafe.eep
+Debug/DigiKeySafe.elf
+Debug/DigiKeySafe.hex
+Debug/DigiKeySafe.lss
+Debug/DigiKeySafe.map
+Debug/DigiKeySafe.srec
+*.d
+*.o
+Debug/Makefile
+Debug/makedep.mk
