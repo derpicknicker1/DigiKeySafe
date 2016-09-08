@@ -4,16 +4,18 @@
  * Created: 06.09.2016 08:55:10
  * Author : Florian Schütte
  */ 
-
+#include "config.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
-#include <avr/wdt.h>
 #include <stdio.h>
+#include <stdint.h>
+#include <util/delay.h>
 #include "uart.h"
 #include "servo.h"
 #include "touch.h"
-#include <util/delay.h>
+#include "leds.h"
+#include "sense.h"
 
 extern char uart_string[UART_MAXSTRLEN + 1];
 
@@ -24,40 +26,39 @@ void sleep_now() {
 	sleep_disable();
 }
 
-
 void init(void)
 {
-	servo_init();
+	//servo_init();
 	uart_init();
 	touch_init();
+	leds_init();
+	sense_init();
 	sei();
-	DDRC = 0x1F;						// PORTD 0..4=output, 5..7=input 
-	sbi(PORTC,PC7);						// pullup PC7
+	//sbi(PORTC,PC7);						// pullup PC7
 }
 
 int main( void )
 {
 	init();
-	//unsigned char servo[1]={0};
+	//unsigned char servo[NUM_SERVOS];
+	//for(uint8_t n=0;n<NUM_SERVOS;n++) servo_set(n,servo[n]);
+	//servo[0] += 10;
 	int values[5] = {0,0,0,0,0};
 	int ref[5] = {0,0,0,0,0};
 	for(int i=0; i<5; i++)				// read reference values
 		ref[i] = touch_read(i,100);
 	while( 1 ) {
-		PORTC &= 0xE0;
+		leds_toggle(7);
 		for(int i = 0;i <5;i++){
-			values[i] = touch_read(i,500) - ref[i];
+			values[i] = touch_read(i,100) - ref[i];
 			printf("%d, ",values[i]);
-			if(values[i]>10)
-				sbi(PORTC,i);
+			leds_set(i,(values[i]>10)?ON:OFF);
 		}
 		uart_puts("\r\n");
 		//sleep_now();
-		if ( !(PINC & (1<<PINC7)) )
-			PORTC |= 0x1F;
+		//if ( !(PINC & (1<<PINC7)) )
+			//PORTC |= 0x1F;
 		_delay_ms(1000);		
-		//for(uint8_t n=0;n<sizeof(servo);n++) servo_set(n,servo[n]);
-		//servo[0] += 10;
 	}
 }
 

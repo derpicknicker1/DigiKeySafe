@@ -2,10 +2,11 @@
 #include <avr/interrupt.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "config.h"
 #include "uart.h"
 
-volatile uint8_t uart_str_complete = 0;     // 1 .. String komplett empfangen
-volatile uint8_t uart_str_count = 0;
+static volatile uint8_t uart_str_complete = 0;     // 1 .. String komplett empfangen
+static volatile uint8_t uart_str_count = 0;
 volatile char uart_string[UART_MAXSTRLEN + 1] = "";
 static FILE mystdout = FDEV_SETUP_STREAM( uart_putc, NULL, _FDEV_SETUP_WRITE );
 

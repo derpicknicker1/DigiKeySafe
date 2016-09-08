@@ -5,6 +5,7 @@
  *  Author: post
  */ 
  #include <avr/io.h>
+ #include "config.h"
  #include "touch.h"
 
  void touch_init(void){
@@ -17,13 +18,13 @@
 	 long value = 0;
 	 for(uint16_t i=0; i<samples; i++)
 	 {
-		 cbi(DDRA,ADCChannel);			// Input+Pullup
-		 sbi(PORTA,ADCChannel);
+		 cbi(TOUCH_DDR,ADCChannel);			// Input+Pullup
+		 sbi(TOUCH_PORT,ADCChannel);
 		 ADMUX |=   0b11111;			// Single-ended GND
 		 sbi(ADCSRA,ADSC);				// Dummy Conversion
 		 while(!(ADCSRA & (1<<ADIF)));
 		 sbi(ADCSRA,ADIF);
-		 cbi(PORTA,ADCChannel);			// Disable Pullup
+		 cbi(TOUCH_PORT,ADCChannel);			// Disable Pullup
 		 ADMUX = (ADMUX & ~(0x1F)) | (ADCChannel & 0x1F); // Read Channel Value
 		 sbi(ADCSRA,ADSC);
 		 while (ADCSRA & (1<<ADSC) );
