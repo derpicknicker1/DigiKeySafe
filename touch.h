@@ -10,6 +10,7 @@
 #define TOUCH_H_
 
 void touch_init(void);
+int touch_ref(uint8_t channel);
 int touch_read( uint8_t ADCChannel, uint16_t samples);
 
 #endif /* TOUCH_H_ */

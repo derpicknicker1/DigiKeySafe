@@ -8,9 +8,18 @@
  #include "config.h"
  #include "touch.h"
 
+ static int touch_refs[TOUCH_CH_NUM];
+
  void touch_init(void){
  	ADCSRA = (1<<ADPS2) | (1<<ADPS0);	// Set prescaler (125kHz)
  	sbi(ADCSRA, ADEN);					// enable ADC
+	for(int i=0; i<TOUCH_CH_NUM; i++)				// read reference values
+		touch_refs[i] = touch_read(i,100);
+ }
+
+ int touch_ref(uint8_t channel)
+ {
+	return touch_refs[channel];
  }
 
  int touch_read( uint8_t ADCChannel, uint16_t samples)

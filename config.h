@@ -18,12 +18,13 @@
 #define UART_MAXSTRLEN	10
 
 //TOUCH
+#define TOUCH_CH_NUM	5
 #define TOUCH_DDR		DDRA
 #define TOUCH_PORT		PORTA
 
 //LEDS
-#define LED_DDR			DDRC
-#define LED_PORT		PORTC
+#define LED_DDR			DDRB
+#define LED_PORT		PORTB
 
 //SENSE
 #define SENSE_1			PD2
@@ -78,5 +79,7 @@
 //UTIL MACROS
 #define sbi(ADDRESS,BIT) (ADDRESS |= (1<<BIT))
 #define cbi(ADDRESS,BIT) (ADDRESS) &= ~(1 << (BIT))
+#define ON	0xFF
+#define OFF 0x00
 
 #endif /* CONFIG_H_ */

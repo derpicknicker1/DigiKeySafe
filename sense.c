@@ -10,14 +10,18 @@
 #include "sense.h"
 #include "leds.h"
 
-void sense_init(void)
+static void (*foo)();
+
+void sense_init(void (*func)())
 {
 	SENSE_DDR &= ~(1 << SENSE_1);
 	SENSE_PORT |= (1 << SENSE_1);
 	MCUCR |= (1 << ISC00);
 	GICR |= (1 << INT0);
+	foo = func;
 }
 
-ISR(INT0_vect){
-	leds_toggle(5);
+ISR(INT0_vect)
+{
+	foo();
 }

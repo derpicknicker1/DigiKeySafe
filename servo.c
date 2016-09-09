@@ -5,7 +5,7 @@
 
 uint16_t Pulslength[NUM_SERVOS*2]; // array for all delays
 
-SIGNAL(TIMER1_OVF_vect)
+ISR(TIMER1_OVF_vect)
 {
 	static unsigned char servoindex_half=0;
 	switch (servoindex_half)
@@ -57,6 +57,14 @@ SIGNAL(TIMER1_OVF_vect)
 	if(servoindex_half==(NUM_SERVOS*2)) servoindex_half=0;	// reset index
 }
 
+void servo_init(void)
+{
+	TCNT1 = 0-16000;
+	sbi(TCCR1B,CS10);
+	servo_set_int(ON);
+	for(uint8_t n=0;n<NUM_SERVOS;n++) servo_set(n,128);
+}
+
 void servo_set(unsigned char index, unsigned char value)
 {
 	uint16_t val;
@@ -65,11 +73,11 @@ void servo_set(unsigned char index, unsigned char value)
 	Pulslength[(index<<1)+1]=0-(TIMER_MAXPULS-val);	
 }
 
-void servo_init(void)
+void servo_set_int(uint8_t mode)
 {
-	TCNT1 = 0-16000;
-	TCCR1A=0;
-	TCCR1B=0x01;
-	TIMSK |= (1 << TOIE2) | (1 << TOIE1);
-	for(uint8_t n=0;n<NUM_SERVOS;n++) servo_set(n,128);
+	if(mode)
+		sbi(TIMSK,TOIE1);
+	else
+		cbi(TIMSK,TOIE1);
 }
+

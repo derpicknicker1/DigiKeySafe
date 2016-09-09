@@ -15,7 +15,7 @@ void uart_init(void)
 	UBRRH = UBRR_VAL >> 8;
 	UBRRL = UBRR_VAL &0xFF;
 	UCSRB |= (1<<TXEN) | (1<<RXEN) | (1<<RXCIE);
-	UCSRC = (1<<URSEL)|(1<<UCSZ1)|(1<<UCSZ0);  // Asynchron 8N1 
+	UCSRC |= (1<<URSEL)|(1<<UCSZ1)|(1<<UCSZ0);  // Asynchron 8N1 
 	stdout = &mystdout;
 }
 

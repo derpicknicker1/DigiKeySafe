@@ -8,9 +8,6 @@
 
 #ifndef LEDS_H_
 #define LEDS_H_
-  
-#define ON	0xFF
-#define OFF 0x00  
  
 #define leds_toggle(bit)		{LED_PORT ^= (1 << bit);}
 #define leds_is_high(bit)	(LED_PIN & (1 << bit))
